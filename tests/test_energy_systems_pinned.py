@@ -16,7 +16,7 @@ from ceto.energy_systems import (
     REFERENCE_VALUES,
 )
 
-from tests.fixtures import (
+from fixtures import (
     FERRY_PAX_VESSEL,
     FERRY_PAX_DAILY_VOYAGE,
     OIL_TANKER_VESSEL,

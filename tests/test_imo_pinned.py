@@ -9,7 +9,7 @@ net during refactoring by detecting any unintended changes in calculation result
 import pytest
 from ceto.imo import estimate_fuel_consumption, estimate_energy_consumption
 
-from tests.fixtures import (
+from fixtures import (
     FERRY_PAX_VESSEL,
     FERRY_PAX_DAILY_VOYAGE,
     OIL_TANKER_VESSEL,
