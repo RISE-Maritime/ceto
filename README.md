@@ -1,7 +1,6 @@
 # Ceto
 
 [![CI](https://github.com/RISE-Maritime/ceto/workflows/CI%20checks/badge.svg)](https://github.com/RISE-Maritime/ceto/actions)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue)](https://rise-maritime.github.io/ceto/)
 [![PyPI](https://img.shields.io/pypi/v/ceto)](https://pypi.org/project/ceto/)
 [![Python Version](https://img.shields.io/pypi/pyversions/ceto)](https://pypi.org/project/ceto/)
 [![License](https://img.shields.io/github/license/RISE-Maritime/ceto)](https://github.com/RISE-Maritime/ceto/blob/main/LICENSE)
@@ -61,16 +60,6 @@ results = imo.calculate_fuel_consumption(vessel_data, voyage_profile)
 print(f"Total fuel consumption: {results['total_fuel']} tonnes")
 ```
 
-## Documentation
-
-Full documentation is available at **[https://rise-maritime.github.io/ceto/](https://rise-maritime.github.io/ceto/)**
-
-- [Installation Guide](https://rise-maritime.github.io/ceto/getting-started/installation/)
-- [Quick Start Tutorial](https://rise-maritime.github.io/ceto/getting-started/quick-start/)
-- [User Guide](https://rise-maritime.github.io/ceto/user-guide/overview/)
-- [API Reference](https://rise-maritime.github.io/ceto/api/imo/)
-- [Development Setup](https://rise-maritime.github.io/ceto/getting-started/development/)
-
 ## Modules
 
 ### IMO Module (`ceto.imo`)
@@ -102,7 +91,7 @@ cd ceto
 # Create virtual environment and install dependencies
 uv venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-uv pip install -e ".[dev,docs]"
+uv pip install -e ".[dev]"
 ```
 
 ### Using pip
@@ -117,7 +106,7 @@ python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install in editable mode with dev dependencies
-pip install -e ".[dev,docs]"
+pip install -e ".[dev]"
 ```
 
 ### Using Dev Containers
@@ -137,18 +126,9 @@ black .
 ruff check --fix .
 ```
 
-### Building Documentation
-
-```bash
-mkdocs serve  # Serve locally at http://127.0.0.1:8000/
-mkdocs build  # Build static site
-```
-
-For more detailed development instructions, see the [Development Guide](https://rise-maritime.github.io/ceto/getting-started/development/).
-
 ## Contributing
 
-Contributions are welcome! Please see our [Contributing Guide](https://rise-maritime.github.io/ceto/contributing/) for details.
+Contributions are welcome!
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)

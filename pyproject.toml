@@ -33,16 +33,9 @@ dev = [
     "pytest>=7.3.1",
     "ruff>=0.1.0",
 ]
-docs = [
-    "mkdocs-material>=9.5.0",
-    "mkdocs-git-revision-date-localized-plugin>=1.2.0",
-    "mkdocstrings[python]>=0.24.0",
-    "mike>=2.0.0",
-]
 
 [project.urls]
 Homepage = "https://github.com/RISE-Maritime/ceto"
-Documentation = "https://rise-maritime.github.io/ceto/"
 Repository = "https://github.com/RISE-Maritime/ceto"
 Issues = "https://github.com/RISE-Maritime/ceto/issues"
 

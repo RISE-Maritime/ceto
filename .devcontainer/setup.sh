@@ -10,7 +10,7 @@ uv venv
 source .venv/bin/activate
 
 echo "Installing project in editable mode with all dependencies..."
-uv pip install -e ".[dev,docs]"
+uv pip install -e ".[dev]"
 
 echo "Setup complete! Virtual environment is ready at .venv"
 echo "To activate: source .venv/bin/activate"
