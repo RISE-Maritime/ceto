@@ -133,6 +133,7 @@ dmypy.json
 
 # uv
 .uv/
+uv.lock
 
 # setuptools-scm version file
 ceto/_version.py
