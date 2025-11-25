@@ -1,6 +1,6 @@
 from pytest import approx, raises
 
-from ceto.imo import (
+from cetos.imo import (
     estimate_auxiliary_power_demand,
     estimate_fuel_consumption,
     estimate_fuel_consumption_of_propulsion_engines,

@@ -1,5 +1,5 @@
 """
-Functions for estimating input to ceto using AIS data
+Functions for estimating input to cetos using AIS data
 """
 
 import math
@@ -9,7 +9,7 @@ from typing import Tuple
 
 import numpy as np
 
-from ceto.utils import ms_to_knots
+from cetos.utils import ms_to_knots
 
 
 def _map_to_imo_ship_type(
@@ -380,7 +380,7 @@ def guesstimate_vessel_data(
     latitude: float,
     longitude: float,
 ) -> dict:
-    """Guesstimate vessel_data input to ceto using parameters readily avilable in AIS data
+    """Guesstimate vessel_data input to cetos using parameters readily avilable in AIS data
 
     Args:
         type_of_ship_and_cargo_type (int): Type of ship and cargo
@@ -528,7 +528,7 @@ def guesstimate_voyage_data(
     design_speed: float,
     design_draft: float,
 ) -> dict:
-    """Guesstimate voyage data input to ceto from parameters readily available in AIS messages
+    """Guesstimate voyage data input to cetos from parameters readily available in AIS messages
 
     Args:
         latitude_1 (float): Latitude at WP1 [deg]

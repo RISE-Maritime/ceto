@@ -1,5 +1,5 @@
 """
-Pinning tests for ceto.imo module.
+Pinning tests for cetos.imo module.
 
 These tests capture the complete output behavior of fuel and energy consumption
 calculations for various vessel types and voyage profiles. They serve as a safety
@@ -22,7 +22,7 @@ from fixtures import (
     ROPAX_VESSEL,
 )
 
-from ceto.imo import estimate_energy_consumption, estimate_fuel_consumption
+from cetos.imo import estimate_energy_consumption, estimate_fuel_consumption
 
 
 @pytest.mark.parametrize(

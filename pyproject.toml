@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ceto"
+name = "cetos"
 description = "A Python package for analyzing vessel data."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -36,21 +36,21 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/RISE-Maritime/ceto"
-Repository = "https://github.com/RISE-Maritime/ceto"
-Issues = "https://github.com/RISE-Maritime/ceto/issues"
+Homepage = "https://github.com/RISE-Maritime/cetos"
+Repository = "https://github.com/RISE-Maritime/cetos"
+Issues = "https://github.com/RISE-Maritime/cetos/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ceto*"]
+include = ["cetos*"]
 exclude = ["tests*"]
 
 [tool.setuptools-scm]
-version_file = "ceto/_version.py"
+version_file = "cetos/_version.py"
 
 [tool.black]
 line-length = 88
-target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312', 'py313']
 include = '\.pyi?$'
 
 [tool.ruff]
@@ -84,7 +84,7 @@ python_functions = ["test_*"]
 addopts = "-v --strict-markers"
 
 [tool.coverage.run]
-source = ["ceto"]
+source = ["cetos"]
 omit = ["*/tests/*", "*/__pycache__/*", "*/site-packages/*"]
 
 [tool.coverage.report]

@@ -136,7 +136,7 @@ dmypy.json
 uv.lock
 
 # setuptools-scm version file
-ceto/_version.py
+cetos/_version.py
 
 # Ruff
 .ruff-cache

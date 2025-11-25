@@ -1,15 +1,15 @@
-# Ceto
+# cetos
 
-[![CI](https://github.com/RISE-Maritime/ceto/workflows/CI%20checks/badge.svg)](https://github.com/RISE-Maritime/ceto/actions)
-[![PyPI](https://img.shields.io/pypi/v/ceto)](https://pypi.org/project/ceto/)
-[![Python Version](https://img.shields.io/pypi/pyversions/ceto)](https://pypi.org/project/ceto/)
-[![License](https://img.shields.io/github/license/RISE-Maritime/ceto)](https://github.com/RISE-Maritime/ceto/blob/main/LICENSE)
+[![CI](https://github.com/RISE-Maritime/cetos/workflows/CI%20checks/badge.svg)](https://github.com/RISE-Maritime/cetos/actions)
+[![PyPI](https://img.shields.io/pypi/v/cetos)](https://pypi.org/project/cetos/)
+[![Python Version](https://img.shields.io/pypi/pyversions/cetos)](https://pypi.org/project/cetos/)
+[![License](https://img.shields.io/github/license/RISE-Maritime/cetos)](https://github.com/RISE-Maritime/cetos/blob/main/LICENSE)
 
 Open-source tools for analyzing vessel data.
 
 ## Overview
 
-Ceto provides tools for analyzing vessel performance, estimating fuel consumption, and evaluating energy systems for maritime vessels. It implements methodologies from the IMO Fourth GHG Study 2020.
+cetos provides tools for analyzing vessel performance, estimating fuel consumption, and evaluating energy systems for maritime vessels. It implements methodologies from the IMO Fourth GHG Study 2020.
 
 ### Features
 
@@ -20,16 +20,16 @@ Ceto provides tools for analyzing vessel performance, estimating fuel consumptio
 
 ## Installation
 
-Install Ceto using pip:
+Install cetos using pip:
 
 ```bash
-pip install ceto
+pip install cetos
 ```
 
 ## Quick Start
 
 ```python
-from ceto import imo
+from cetos import imo
 
 # Define vessel characteristics
 vessel_data = {
@@ -62,16 +62,16 @@ print(f"Total fuel consumption: {results['total_fuel']} tonnes")
 
 ## Modules
 
-### IMO Module (`ceto.imo`)
+### IMO Module (`cetos.imo`)
 Functions for estimating vessel fuel consumption based on IMO Fourth GHG Study 2020 methodologies.
 
-### Energy Systems (`ceto.energy_systems`)
+### Energy Systems (`cetos.energy_systems`)
 Tools for analyzing vessel energy systems including batteries, hydrogen, and internal combustion engines.
 
-### AIS Adapter (`ceto.ais_adapter`)
+### AIS Adapter (`cetos.ais_adapter`)
 Process AIS (Automatic Identification System) data and convert it to voyage profiles.
 
-### Analysis (`ceto.analysis`)
+### Analysis (`cetos.analysis`)
 Additional analysis tools for vessel performance evaluation.
 
 ## Development
@@ -85,8 +85,8 @@ Additional analysis tools for vessel performance evaluation.
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone the repository
-git clone https://github.com/RISE-Maritime/ceto.git
-cd ceto
+git clone https://github.com/RISE-Maritime/cetos.git
+cd cetos
 
 # Create virtual environment and install dependencies
 uv venv
@@ -98,8 +98,8 @@ uv pip install -e ".[dev]"
 
 ```bash
 # Clone the repository
-git clone https://github.com/RISE-Maritime/ceto.git
-cd ceto
+git clone https://github.com/RISE-Maritime/cetos.git
+cd cetos
 
 # Create and activate virtual environment
 python -m venv .venv
@@ -146,6 +146,6 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## Contact
 
-- **Issues**: [GitHub Issues](https://github.com/RISE-Maritime/ceto/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/RISE-Maritime/ceto/discussions)
+- **Issues**: [GitHub Issues](https://github.com/RISE-Maritime/cetos/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/RISE-Maritime/cetos/discussions)
 

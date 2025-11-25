@@ -1,6 +1,6 @@
 from pytest import approx, raises
 
-from ceto.analysis import (
+from cetos.analysis import (
     cross_track_distance,
     douglas_peucker,
     frechet_distance,

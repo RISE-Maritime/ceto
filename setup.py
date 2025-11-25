@@ -1,9 +1,9 @@
 from setuptools import find_packages, setup
 
 # Package meta-data.
-NAME = "ceto"
+NAME = "cetos"
 DESCRIPTION = "A Python package for analyzing vessel data."
-URL = "https://github.com/rise-mo/ceto"
+URL = "https://github.com/rise-mo/cetos"
 EMAIL = "luis.sanchez-heres@ri.se"
 AUTHOR = "Maritime Department - RISE"
 REQUIRES_PYTHON = ">=3.8.0"
