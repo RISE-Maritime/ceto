@@ -10,7 +10,7 @@ uv venv
 source .venv/bin/activate
 
 echo "Installing project in editable mode with all dependencies..."
-uv pip install -e --group dev
+uv pip install -e . --group dev
 
 echo "Activating virtual environment on terminal start..."
 echo 'source /workspaces/ceto/.venv/bin/activate' >> /home/vscode/.bashrc
