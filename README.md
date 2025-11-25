@@ -1,30 +1,45 @@
-# ceto
+# Ceto
 
-Open-source tools for analysing vessel data.
+[![CI](https://github.com/RISE-Maritime/ceto/workflows/CI%20checks/badge.svg)](https://github.com/RISE-Maritime/ceto/actions)
+[![PyPI](https://img.shields.io/pypi/v/ceto)](https://pypi.org/project/ceto/)
+[![Python Version](https://img.shields.io/pypi/pyversions/ceto)](https://pypi.org/project/ceto/)
+[![License](https://img.shields.io/github/license/RISE-Maritime/ceto)](https://github.com/RISE-Maritime/ceto/blob/main/LICENSE)
 
-## Development
+Open-source tools for analyzing vessel data.
 
-To develop `ceto`, clone the repository, create a virtual environment, and install `ceto` as editable code by running the following command in the root directory of the repository:
+## Overview
 
+Ceto provides tools for analyzing vessel performance, estimating fuel consumption, and evaluating energy systems for maritime vessels. It implements methodologies from the IMO Fourth GHG Study 2020.
+
+### Features
+
+- **Fuel Consumption Estimation**: Calculate vessel fuel consumption based on IMO methodologies
+- **Energy System Analysis**: Analyze batteries, hydrogen systems, and hybrid propulsion
+- **AIS Data Processing**: Convert AIS data to voyage profiles
+- **Multiple Vessel Types**: Support for various vessel types (ferries, container ships, tankers, etc.)
+
+## Installation
+
+Install Ceto using pip:
+
+```bash
+pip install ceto
 ```
-$ pip install -e .
-```
 
-## Usage
-
-### General
-
-For better or for worse, `ceto` uses two specific dictionaries as arguments of many of its functions: `vessel_data` and `voyage_profile`. Here are some examples of these dictionaries:
+## Quick Start
 
 ```python
+from ceto import imo
+
+# Define vessel characteristics
 vessel_data = {
     "length": 39.8,  # meters
-    "beam": 10.46,  # meteres
+    "beam": 10.46,  # meters
     "design_speed": 13.5,  # knots
     "design_draft": 2.84,  # meters
-    "double_ended": False,  # True or False
+    "double_ended": False,
     "number_of_propulsion_engines": 4,
-    "propulsion_engine_power": 330,  # per engine kW
+    "propulsion_engine_power": 330,  # kW per engine
     "propulsion_engine_type": "MSD",
     "propulsion_engine_age": "after_2000",
     "propulsion_engine_fuel_type": "MDO",
@@ -32,100 +47,105 @@ vessel_data = {
     "size": 686,  # GT
 }
 
+# Define voyage profile
 voyage_profile = {
     "time_anchored": 10.0,  # hours
     "time_at_berth": 10.0,  # hours
-    "legs_manoeuvring": [
-        (10, 10, 6),  # distance (nm), speed (kn), draft (m)
-    ],
-    "legs_at_sea": [(30, 10, 6), (30, 10, 6)],  # distance (nm), speed (kn), draft (m)
+    "legs_manoeuvring": [(10, 10, 6)],  # (distance, speed, draft)
+    "legs_at_sea": [(30, 10, 6), (30, 10, 6)],
 }
 
+# Calculate fuel consumption
+results = imo.calculate_fuel_consumption(vessel_data, voyage_profile)
+print(f"Total fuel consumption: {results['total_fuel']} tonnes")
 ```
 
-The `vessel_data` dictionary must have the following key-value pairs:
-- `length`: Length overall of the vessel in meters (m).
-- `beam`: Beam or breadth of the vessel in meters (m).
-- `design_speed`: Design speed of the vessel in knots (kn).
-- `design_draft`: Design draft of the vessel in meters (m).
-- `propulsion_engine_power`: Power of a single propulsion engine in kilo Watts (kW).,
-- `propulsion_engine_type`: Type of propulsion engine. The possible types/values are:
-  - `'SSD'`: Slow-Speed Diesel. An oil engine with a speed equal or lower than 300 RPM.
-  - `'MSD`': Medium-Speed Diesel. An oil engine with a speed ranging from 300 to 900 RPM.
-  - `'HSD'`: High-Speed Diesel. An oil engine with a speed above 900 RPM.
-  - `'LNG-Otto-MS'`: Four-stroke, medium-speed (300 > RPM > 900), dual-fuel engines (LNG and oils) that operate on the Otto cycle.
-  - `'LBSI`': LNG engines built by Rolls-Royce/Bergen.
-  - `'gas_turbine'`: Gas turbine engine.
-  - `'steam_turbine'`: Steam turbine engine. Includes oil-based fuels, LNG, and boil-off gas.
-- `propulsion_engine_age`: The age of the propulsion engine. The possible types/values are:
-  - `'before_1984'`: All engines manufactured before 1984.
-  - `'1984-2000'`: All engines manufactured between 1984 and 2000.
-  - `'after_2000'`: All engines manufactured after 2000.
-- `propulsion_engine_fuel_type`: Type of fuel used by the propulson engine. The possible types/values are:
-  - `'HFO'`: Heavy Fuel Oil
-  - `'MDO'`: Marine Diesel Oil
-  - `'MeOH'`: Methanol.
-  - `'LNG'`: Liquid Natural Gas (including boil-off gas).
-- `type`: The type of vessel. The possible types/values are:
-  - Cargo-carrying transport ships:
-    - `'bulk_carrier'`
-    - `'chemical_tanker'`
-    - `'container'`
-    - `'general_cargo'`
-    - `'liquified_gas_tanker'`
-    - `'oil_tanker'`
-    - `'other_liquids_tanker'`
-    - `'ferry-pax'`
-    - `'cruise'`
-    - `'ferry-ropax'`
-    - `'refrigerated_cargo'`
-    - `'roro'`
-    - `'vehicle'`
-  - Non-merchant ships:
-    - `'yacht'`
-    - `'miscellaneous-fishing'`
-  - Work vessels:
-    - `'service-tug'`
-    - `'offshore'`
-    - `'service-other'`
-  - Non-seagoing merchant ships:
-    - `'miscellaneous-other'`
-- `size`: Numerical value describing the size of the vessel in the appropriate units for its type. The appropriate unit for a given vessel type are:
-  - `bulk_carrier` -> Deadweight Tonnage (DWT)
-  - `chemical_tanker` -> Deadweight Tonnage (DWT)
-  - `container` -> Twenty-foot Equivalent Units (TEU)
-  - `general_cargo` -> Deadweight Tonnage (DWT)
-  - `liquified_gas_tanker` -> Cubic Metres (CBM)
-  - `oil_tanker` -> Deadweight Tonnage (DWT)
-  - `other_liquids_tanker` -> Deadweight Tonnage (DWT)
-  - `ferry` -> Gross Tonnes (GT)
-  - `cruise` -> Gross Tonnes (GT)
-  - `ropax` -> Gross Tonnes (GT)
-  - `refrigerated_cargo` -> Deadweight Tonnage (DWT)
-  - `roro` -> Deadweight Tonnage (DWT)
-  - `vehicle` -> Number of cars (NC)
-  - `yacht` -> Gross Tonnes (GT)
-  - `miscellaneous-fishing` -> Gross Tonnes (GT)
-  - `service-tug` -> Gross Tonnes (GT)
-  - `offshore` -> Gross Tonnes (GT)
-  - `service-other` -> Gross Tonnes (GT)
-  - `miscellaneous-other` -> Gross Tonnes (GT)
+## Modules
 
-The `voyage_profile` dictionary must have the following key-value pairs:
+### IMO Module (`ceto.imo`)
+Functions for estimating vessel fuel consumption based on IMO Fourth GHG Study 2020 methodologies.
 
-  - `time_anchored`: Time spent anchored (h).
-  - `time_at_berth`: Time spent at berth (h).
-  - `legs_manoeuvring`: List of (distance (nm), speed (kn), draft (m)) tuples summarizing the conditions and distance the vessel spent manoeuvring. 
-  - `legs_at_sea`': List of (distance (nm), speed (kn), draft (m)) tuples summarizing the conditions and distance the vessel at sea.
+### Energy Systems (`ceto.energy_systems`)
+Tools for analyzing vessel energy systems including batteries, hydrogen, and internal combustion engines.
 
-Whether a vessel is "at sea" or "manoeuvring" can be determined through the criteria presented in [1].
+### AIS Adapter (`ceto.ais_adapter`)
+Process AIS (Automatic Identification System) data and convert it to voyage profiles.
 
-## Module
+### Analysis (`ceto.analysis`)
+Additional analysis tools for vessel performance evaluation.
 
-- `imo`: This module includes functions for estimating the fuel consumption of vessels. Based on [1].
-- `energy_systems`: This module includes functions for estimating the details of vessel energy systems (i.e. internal combustion systems, battery systems, and hydrogen systems).
+## Development
+
+### Quick Setup with uv (Recommended)
+
+[uv](https://github.com/astral-sh/uv) is a fast Python package installer and resolver:
+
+```bash
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone the repository
+git clone https://github.com/RISE-Maritime/ceto.git
+cd ceto
+
+# Create virtual environment and install dependencies
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -e ".[dev]"
+```
+
+### Using pip
+
+```bash
+# Clone the repository
+git clone https://github.com/RISE-Maritime/ceto.git
+cd ceto
+
+# Create and activate virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install in editable mode with dev dependencies
+pip install -e ".[dev]"
+```
+
+### Using Dev Containers
+
+This repository includes a dev container configuration for VS Code. Simply open the repository in VS Code and select "Reopen in Container" when prompted.
+
+### Running Tests
+
+```bash
+pytest tests/
+```
+
+### Code Formatting
+
+```bash
+black .
+ruff check --fix .
+```
+
+## Contributing
+
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
 
 ## References
 
- [1] IMO. Fourth IMO GHG Study 2020. IMO.
+[1] IMO. Fourth IMO GHG Study 2020. International Maritime Organization.
+
+## Contact
+
+- **Issues**: [GitHub Issues](https://github.com/RISE-Maritime/ceto/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/RISE-Maritime/ceto/discussions)
 

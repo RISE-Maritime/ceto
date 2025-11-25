@@ -1,15 +1,15 @@
-from pytest import raises, approx
+from pytest import approx, raises
+
 from ceto.imo import (
-    estimate_instantaneous_fuel_consumption_of_auxiliary_systems,
-    estimate_specific_fuel_consumption,
-    verify_vessel_data,
     estimate_auxiliary_power_demand,
-    verify_voyage_profile,
-    estimate_propulsion_engine_load,
     estimate_fuel_consumption,
     estimate_fuel_consumption_of_propulsion_engines,
+    estimate_instantaneous_fuel_consumption_of_auxiliary_systems,
+    estimate_propulsion_engine_load,
+    estimate_specific_fuel_consumption,
+    verify_vessel_data,
+    verify_voyage_profile,
 )
-
 
 DUMMY_VESSEL_DATA = {
     "design_speed": 10,  # kn

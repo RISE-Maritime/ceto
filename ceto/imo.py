@@ -1,16 +1,16 @@
 """
-Estimates of fuel and energy consumption for vessels. 
+Estimates of fuel and energy consumption for vessels.
 """
 
 # pylint: disable=too-many-locals
 
 
 from ceto.utils import (
-    verify_range,
-    verify_set,
     verify_key_value_range,
     verify_key_value_set,
     verify_key_value_type,
+    verify_range,
+    verify_set,
 )
 
 VESSEL_TYPES = [
@@ -1151,17 +1151,21 @@ def estimate_energy_consumption(
             + energy_steam_boilers_at_berth,
             "auxiliary_engines_kwh": energy_auxiliary_engines_at_berth,
             "steam_boilers_kwh": energy_steam_boilers_at_berth,
-            "maximum_required_total_power_kw": 0.0
-            if voyage_profile["time_at_berth"] == 0
-            else power_auxiliary_engines_at_berth + power_steam_boilers_at_berth,
+            "maximum_required_total_power_kw": (
+                0.0
+                if voyage_profile["time_at_berth"] == 0
+                else power_auxiliary_engines_at_berth + power_steam_boilers_at_berth
+            ),
         }
     else:
         energy_at_berth = {
             "subtotal_kwh": energy_auxiliary_engines_at_berth,
             "auxiliary_engines_kwh": energy_auxiliary_engines_at_berth,
-            "maximum_required_total_power_kw": 0.0
-            if voyage_profile["time_at_berth"] == 0
-            else power_auxiliary_engines_at_berth,
+            "maximum_required_total_power_kw": (
+                0.0
+                if voyage_profile["time_at_berth"] == 0
+                else power_auxiliary_engines_at_berth
+            ),
         }
 
     # Anchored
@@ -1181,17 +1185,21 @@ def estimate_energy_consumption(
             + energy_steam_boilers_anchored,
             "auxiliary_engines_kwh": energy_auxiliary_engines_anchored,
             "steam_boilers_kwh": energy_steam_boilers_anchored,
-            "maximum_required_total_power_kw": 0.0
-            if voyage_profile["time_anchored"] == 0
-            else power_auxiliary_engines_anchored + power_steam_boilers_anchored,
+            "maximum_required_total_power_kw": (
+                0.0
+                if voyage_profile["time_anchored"] == 0
+                else power_auxiliary_engines_anchored + power_steam_boilers_anchored
+            ),
         }
     else:
         energy_anchored = {
             "subtotal_kwh": energy_auxiliary_engines_anchored,
             "auxiliary_engines_kwh": energy_auxiliary_engines_anchored,
-            "maximum_required_total_power_kw": 0.0
-            if voyage_profile["time_anchored"] == 0
-            else power_auxiliary_engines_anchored,
+            "maximum_required_total_power_kw": (
+                0.0
+                if voyage_profile["time_anchored"] == 0
+                else power_auxiliary_engines_anchored
+            ),
         }
 
     # Manoeuvring

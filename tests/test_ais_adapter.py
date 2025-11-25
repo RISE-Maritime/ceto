@@ -1,9 +1,9 @@
 from datetime import datetime
 
+import pytest
+
 import ceto.ais_adapter as cais
 from ceto.imo import verify_vessel_data
-
-import pytest
 
 
 def test_shiptype_mapping():
@@ -108,7 +108,7 @@ def test_guesstimate_vessel_data():
     assert vdata["propulsion_engine_type"] == "SSD"
     assert vdata["propulsion_engine_fuel_type"] == "MDO"
 
-    assert vdata["double_ended"] == False
+    assert not vdata["double_ended"]
     assert vdata["propulsion_engine_age"] == "after_2000"
 
     assert "size" in vdata.keys()

@@ -1,15 +1,17 @@
 """
 Energy Systems
 """
+
 import math
-from ceto.utils import verify_range, knots_to_ms
+
 from ceto.imo import (
-    estimate_energy_consumption,
     calculate_fuel_volume,
+    estimate_energy_consumption,
+    estimate_fuel_consumption_of_propulsion_engines,
     verify_vessel_data,
     verify_voyage_profile,
-    estimate_fuel_consumption_of_propulsion_engines,
 )
+from ceto.utils import knots_to_ms, verify_range
 
 DENSITY_SEAWATER = 1025  # kg/m3
 

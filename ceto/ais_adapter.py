@@ -1,10 +1,11 @@
 """
 Functions for estimating input to ceto using AIS data
 """
+
 import math
 import warnings
-from typing import Tuple
 from datetime import datetime
+from typing import Tuple
 
 import numpy as np
 
@@ -71,7 +72,8 @@ def _map_to_imo_ship_type(
     # else
     warnings.warn(
         f"Type of ship and cargo type: {type_of_ship_and_cargo_type} cannot be"
-        " mapped to a IMO ship type, will be treated as 'service-other'"
+        " mapped to a IMO ship type, will be treated as 'service-other'",
+        stacklevel=2,
     )
     return "service-other"
 

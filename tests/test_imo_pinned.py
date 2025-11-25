@@ -7,22 +7,22 @@ net during refactoring by detecting any unintended changes in calculation result
 """
 
 import pytest
-from ceto.imo import estimate_fuel_consumption, estimate_energy_consumption
-
 from fixtures import (
-    FERRY_PAX_VESSEL,
-    FERRY_PAX_DAILY_VOYAGE,
-    OIL_TANKER_VESSEL,
-    OIL_TANKER_LONG_VOYAGE,
-    GENERAL_CARGO_VESSEL,
-    GENERAL_CARGO_MEDIUM_VOYAGE,
-    OFFSHORE_VESSEL,
-    OFFSHORE_SHORT_VOYAGE,
-    ROPAX_VESSEL,
-    ROPAX_FREQUENT_VOYAGE,
-    MINIMAL_VOYAGE,
     COMPLEX_VOYAGE,
+    FERRY_PAX_DAILY_VOYAGE,
+    FERRY_PAX_VESSEL,
+    GENERAL_CARGO_MEDIUM_VOYAGE,
+    GENERAL_CARGO_VESSEL,
+    MINIMAL_VOYAGE,
+    OFFSHORE_SHORT_VOYAGE,
+    OFFSHORE_VESSEL,
+    OIL_TANKER_LONG_VOYAGE,
+    OIL_TANKER_VESSEL,
+    ROPAX_FREQUENT_VOYAGE,
+    ROPAX_VESSEL,
 )
+
+from ceto.imo import estimate_energy_consumption, estimate_fuel_consumption
 
 
 @pytest.mark.parametrize(

@@ -7,26 +7,20 @@ They serve as a safety net during refactoring.
 """
 
 import pytest
+from fixtures import (
+    FERRY_PAX_DAILY_VOYAGE,
+    FERRY_PAX_VESSEL,
+    OFFSHORE_SHORT_VOYAGE,
+    OFFSHORE_VESSEL,
+)
+
 from ceto.energy_systems import (
+    REFERENCE_VALUES,
     estimate_internal_combustion_system,
     estimate_vessel_battery_system,
     estimate_vessel_gas_hydrogen_system,
     suggest_alternative_energy_systems,
     suggest_alternative_energy_systems_simple,
-    REFERENCE_VALUES,
-)
-
-from fixtures import (
-    FERRY_PAX_VESSEL,
-    FERRY_PAX_DAILY_VOYAGE,
-    OIL_TANKER_VESSEL,
-    OIL_TANKER_LONG_VOYAGE,
-    GENERAL_CARGO_VESSEL,
-    GENERAL_CARGO_MEDIUM_VOYAGE,
-    OFFSHORE_VESSEL,
-    OFFSHORE_SHORT_VOYAGE,
-    ROPAX_VESSEL,
-    ROPAX_FREQUENT_VOYAGE,
 )
 
 
@@ -36,7 +30,7 @@ def _to_json_serializable(obj):
     pytest-pinned stores results as JSON, which converts tuples to lists.
     """
     if isinstance(obj, tuple):
-        return list(_to_json_serializable(item) for item in obj)
+        return [_to_json_serializable(item) for item in obj]
     elif isinstance(obj, list):
         return [_to_json_serializable(item) for item in obj]
     elif isinstance(obj, dict):

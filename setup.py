@@ -5,7 +5,7 @@ NAME = "ceto"
 DESCRIPTION = "A Python package for analyzing vessel data."
 URL = "https://github.com/rise-mo/ceto"
 EMAIL = "luis.sanchez-heres@ri.se"
-AUTHOR = "Maritime Operations - RISE"
+AUTHOR = "Maritime Department - RISE"
 REQUIRES_PYTHON = ">=3.8.0"
 VERSION = "0.1.0"
 
@@ -22,10 +22,6 @@ TROVE_CLASSIFIERS = [
 with open("README.md", encoding="utf-8") as f:
     long_description = "\n" + f.read()
 
-# Import requirements.txt to populate 'install_requires'
-with open("requirements.txt", encoding="utf-8") as f:
-    requirements = f.readlines()
-
 setup(
     name=NAME,
     version=VERSION,
@@ -37,7 +33,6 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
-    install_requires=[req for req in requirements if req[:2] != "# "],
     include_package_data=True,
     license="Apache License 2.0",
     classifiers=TROVE_CLASSIFIERS,

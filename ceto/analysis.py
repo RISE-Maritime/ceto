@@ -1,9 +1,8 @@
-from typing import List, Tuple
-from sklearn.cluster import DBSCAN, KMeans, AgglomerativeClustering
-import numpy as np
-
-
 import math
+from typing import List, Tuple
+
+import numpy as np
+from sklearn.cluster import DBSCAN, AgglomerativeClustering
 
 R = 6371000  # Earth's radius in meters
 
@@ -364,7 +363,7 @@ def generate_representative_route(trajectories, epsilon: float = 10):
 
     # Calculate the average leg speeds
     avg_leg_speeds_kn = [
-        ((leg_distance / leg_time))
+        (leg_distance / leg_time)
         for leg_time, leg_distance in zip(avg_leg_times_h, leg_distances_nm)
     ]
 

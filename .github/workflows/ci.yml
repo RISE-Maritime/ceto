@@ -8,45 +8,65 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  schedule:
-   - cron: "0 6 * * *"
 
 jobs:
   linting:
-
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
       with:
-        python-version: '3.x'
+        fetch-depth: 0  # Required for setuptools-scm
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements_dev.txt
-        pip install -e .
+        uv venv
+        uv pip install -e . --group dev
+
     - name: Run black
       run: |
-        black --check .
+        uv run black --check .
+
+    - name: Run ruff
+      run: |
+        uv run ruff check .
 
   testing:
     needs: linting
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Required for setuptools-scm
+
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with: 
-          python-version: ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements_dev.txt
-        pip install -e .
+        uv venv
+        uv pip install -e . --group dev
+
     - name: Test with pytest
       run: |
-        pytest tests/
+        uv run pytest tests/

@@ -8,14 +8,16 @@ These tests capture complete pipelines combining multiple modules:
 They serve as comprehensive regression tests during refactoring.
 """
 
-import pytest
 from datetime import datetime
+
+import pytest
+
 from ceto.ais_adapter import guesstimate_vessel_data, guesstimate_voyage_data
-from ceto.imo import estimate_fuel_consumption, estimate_energy_consumption
 from ceto.energy_systems import (
-    suggest_alternative_energy_systems,
     REFERENCE_VALUES,
+    suggest_alternative_energy_systems,
 )
+from ceto.imo import estimate_energy_consumption, estimate_fuel_consumption
 
 
 def _to_json_serializable(obj):
@@ -24,7 +26,7 @@ def _to_json_serializable(obj):
     pytest-pinned stores results as JSON, which converts tuples to lists.
     """
     if isinstance(obj, tuple):
-        return list(_to_json_serializable(item) for item in obj)
+        return [_to_json_serializable(item) for item in obj]
     elif isinstance(obj, list):
         return [_to_json_serializable(item) for item in obj]
     elif isinstance(obj, dict):

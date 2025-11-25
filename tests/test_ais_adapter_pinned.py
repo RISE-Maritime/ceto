@@ -5,8 +5,10 @@ These tests capture the complete output behavior of vessel and voyage data
 estimation from AIS messages. They serve as a safety net during refactoring.
 """
 
-import pytest
 from datetime import datetime
+
+import pytest
+
 from ceto.ais_adapter import guesstimate_vessel_data, guesstimate_voyage_data
 
 
@@ -16,7 +18,7 @@ def _to_json_serializable(obj):
     pytest-pinned stores results as JSON, which converts tuples to lists.
     """
     if isinstance(obj, tuple):
-        return list(_to_json_serializable(item) for item in obj)
+        return [_to_json_serializable(item) for item in obj]
     elif isinstance(obj, list):
         return [_to_json_serializable(item) for item in obj]
     elif isinstance(obj, dict):

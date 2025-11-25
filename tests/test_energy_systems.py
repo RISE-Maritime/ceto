@@ -1,13 +1,13 @@
-from ceto.imo import estimate_energy_consumption
 from ceto.energy_systems import (
+    HYDROGEN_ENERGY_DENSITY_KWHPKG,
+    REFERENCE_VALUES,
+    estimate_internal_combustion_system,
     estimate_vessel_battery_system,
     estimate_vessel_gas_hydrogen_system,
-    REFERENCE_VALUES,
-    HYDROGEN_ENERGY_DENSITY_KWHPKG,
-    estimate_internal_combustion_system,
     suggest_alternative_energy_systems,
     suggest_alternative_energy_systems_simple,
 )
+from ceto.imo import estimate_energy_consumption
 
 DUMMY_VESSEL_DATA = {
     "length": 39.8,  # meters

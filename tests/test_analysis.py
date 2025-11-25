@@ -1,10 +1,11 @@
+from pytest import approx, raises
+
 from ceto.analysis import (
     cross_track_distance,
     douglas_peucker,
     frechet_distance,
     haversine,
 )
-from pytest import approx, raises
 
 
 def test_cross_track_distance_same_point():
