@@ -5,7 +5,7 @@ Estimates of fuel and energy consumption for vessels.
 # pylint: disable=too-many-locals
 
 
-from ceto.utils import (
+from cetos.utils import (
     verify_key_value_range,
     verify_key_value_set,
     verify_key_value_type,

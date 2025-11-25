@@ -2,8 +2,8 @@ from datetime import datetime
 
 import pytest
 
-import ceto.ais_adapter as cais
-from ceto.imo import verify_vessel_data
+import cetos.ais_adapter as cais
+from cetos.imo import verify_vessel_data
 
 
 def test_shiptype_mapping():

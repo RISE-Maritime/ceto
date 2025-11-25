@@ -1,5 +1,5 @@
 """
-Pinning tests for ceto.energy_systems module.
+Pinning tests for cetos.energy_systems module.
 
 These tests capture the complete output behavior of energy system estimations
 including internal combustion, battery, hydrogen, and alternative energy systems.
@@ -14,7 +14,7 @@ from fixtures import (
     OFFSHORE_VESSEL,
 )
 
-from ceto.energy_systems import (
+from cetos.energy_systems import (
     REFERENCE_VALUES,
     estimate_internal_combustion_system,
     estimate_vessel_battery_system,

@@ -12,12 +12,12 @@ from datetime import datetime
 
 import pytest
 
-from ceto.ais_adapter import guesstimate_vessel_data, guesstimate_voyage_data
-from ceto.energy_systems import (
+from cetos.ais_adapter import guesstimate_vessel_data, guesstimate_voyage_data
+from cetos.energy_systems import (
     REFERENCE_VALUES,
     suggest_alternative_energy_systems,
 )
-from ceto.imo import estimate_energy_consumption, estimate_fuel_consumption
+from cetos.imo import estimate_energy_consumption, estimate_fuel_consumption
 
 
 def _to_json_serializable(obj):
