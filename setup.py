@@ -22,10 +22,6 @@ TROVE_CLASSIFIERS = [
 with open("README.md", encoding="utf-8") as f:
     long_description = "\n" + f.read()
 
-# Import requirements.txt to populate 'install_requires'
-with open("requirements.txt", encoding="utf-8") as f:
-    requirements = f.readlines()
-
 setup(
     name=NAME,
     version=VERSION,
@@ -37,7 +33,6 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
-    install_requires=[req for req in requirements if req[:2] != "# "],
     include_package_data=True,
     license="Apache License 2.0",
     classifiers=TROVE_CLASSIFIERS,
