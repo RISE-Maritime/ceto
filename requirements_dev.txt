@@ -1,6 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 black==23.3.0
 pytest==7.3.1
 pytest-pinned
 >>>>>>> main
+=======
+>>>>>>> 5e25a0a5ea22b7b64fd5bd0b022cd0b49488a012
