@@ -1,5 +1,5 @@
 """
-Pinning tests for ceto.ais_adapter module.
+Pinning tests for cetos.ais_adapter module.
 
 These tests capture the complete output behavior of vessel and voyage data
 estimation from AIS messages. They serve as a safety net during refactoring.
@@ -9,7 +9,7 @@ from datetime import datetime
 
 import pytest
 
-from ceto.ais_adapter import guesstimate_vessel_data, guesstimate_voyage_data
+from cetos.ais_adapter import guesstimate_vessel_data, guesstimate_voyage_data
 
 
 def _to_json_serializable(obj):

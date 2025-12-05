@@ -1,6 +1,6 @@
 import pytest
 
-from ceto.utils import knots_to_ms, ms_to_knots
+from cetos.utils import knots_to_ms, ms_to_knots
 
 
 def test_conversions():

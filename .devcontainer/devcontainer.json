@@ -1,14 +1,11 @@
 {
-  "name": "Ceto Development",
+  "name": "cetos Development",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
-
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-
   "postCreateCommand": "bash .devcontainer/setup.sh",
-
   "customizations": {
     "vscode": {
       "extensions": [
@@ -36,6 +33,5 @@
       }
     }
   },
-
   "remoteUser": "vscode"
 }

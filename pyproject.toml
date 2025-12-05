@@ -1,57 +1,56 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools>=64", "setuptools-scm>=8"]
 
 [project]
-name = "ceto"
+name = "cetos"
 description = "A Python package for analyzing vessel data."
 readme = "README.md"
 requires-python = ">=3.8"
-license = {text = "Apache License 2.0"}
+license = { text = "Apache License 2.0" }
 authors = [
-    {name = "Maritime Operations - RISE", email = "luis.sanchez-heres@ri.se"}
+  { name = "Luis Sanchez-Heres", email = "luis.sanchez-heres@ri.se" },
+  { name = "Fredrik Olsson", email = "fredrik.x.olsson@ri.se" },
+  { name = "Maritime Department - RISE" },
 ]
 classifiers = [
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: Apache Software License",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
 ]
 dynamic = ["version"]
-dependencies = [
-    "numpy",
-    "scikit-learn",
-]
+dependencies = ["numpy", "scikit-learn"]
+
+[project.urls]
+Homepage = "https://github.com/RISE-Maritime/cetos"
+Repository = "https://github.com/RISE-Maritime/cetos"
+Issues = "https://github.com/RISE-Maritime/cetos/issues"
 
 [dependency-groups]
 dev = [
-    "black>=23.3.0",
-    "pytest>=7.3.1",
-    "ruff>=0.1.0",
-    "pytest-pinned>=0.4.2",
+  "black>=23.3.0",
+  "pytest>=7.3.1",
+  "pytest-pinned>=0.4.2",
+  "ruff>=0.1.0",
 ]
-
-[project.urls]
-Homepage = "https://github.com/RISE-Maritime/ceto"
-Repository = "https://github.com/RISE-Maritime/ceto"
-Issues = "https://github.com/RISE-Maritime/ceto/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ceto*"]
+include = ["cetos*"]
 exclude = ["tests*"]
 
 [tool.setuptools-scm]
-version_file = "ceto/_version.py"
+version_file = "cetos/_version.py"
 
 [tool.black]
 line-length = 88
-target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
-include = '\.pyi?$'
+target-version = ["py38", "py39", "py310", "py311", "py312", "py313"]
+include = "\\.pyi?$"
 
 [tool.ruff]
 line-length = 88
@@ -77,14 +76,14 @@ ignore = [
 "__init__.py" = ["F401"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
 addopts = "-v --strict-markers"
+python_classes = ["Test*"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+testpaths = ["tests"]
 
 [tool.coverage.run]
-source = ["ceto"]
+source = ["cetos"]
 omit = ["*/tests/*", "*/__pycache__/*", "*/site-packages/*"]
 
 [tool.coverage.report]
