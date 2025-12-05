@@ -49,7 +49,9 @@ def test_estimate_fuel_consumption_pinned(
     - at_sea (propulsion_engines_kg, auxiliary_engines_kg, steam_boilers_kg)
     """
     result = estimate_fuel_consumption(vessel_data, voyage_profile)
-    assert result == pinned
+    # Convert dataclass result to dict for comparison
+    result_dict = result.to_dict()
+    assert result_dict == pinned
 
 
 @pytest.mark.parametrize(
@@ -79,13 +81,13 @@ def test_estimate_energy_consumption_pinned(
 def test_estimate_fuel_consumption_minimal_voyage_pinned(pinned):
     """Pin fuel consumption for minimal voyage (edge case)."""
     result = estimate_fuel_consumption(FERRY_PAX_VESSEL, MINIMAL_VOYAGE)
-    assert result == pinned
+    assert result.to_dict() == pinned
 
 
 def test_estimate_fuel_consumption_complex_voyage_pinned(pinned):
     """Pin fuel consumption for complex multi-leg voyage."""
     result = estimate_fuel_consumption(GENERAL_CARGO_VESSEL, COMPLEX_VOYAGE)
-    assert result == pinned
+    assert result.to_dict() == pinned
 
 
 def test_estimate_energy_consumption_with_steam_boilers_pinned(pinned):
@@ -113,10 +115,10 @@ def test_estimate_energy_consumption_with_7_percent_limit_pinned(pinned):
 def test_estimate_fuel_consumption_offshore_vessel_pinned(pinned):
     """Pin fuel consumption for offshore vessel (size=None handling)."""
     result = estimate_fuel_consumption(OFFSHORE_VESSEL, OFFSHORE_SHORT_VOYAGE)
-    assert result == pinned
+    assert result.to_dict() == pinned
 
 
 def test_estimate_fuel_consumption_double_ended_ferry_pinned(pinned):
     """Pin fuel consumption for double-ended RoPax ferry."""
     result = estimate_fuel_consumption(ROPAX_VESSEL, ROPAX_FREQUENT_VOYAGE)
-    assert result == pinned
+    assert result.to_dict() == pinned

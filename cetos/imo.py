@@ -67,15 +67,73 @@ MAX_ENGINE_POWER_KW = 60_000
 
 
 # Legacy verification functions for internal dict-based functions
-# These are minimal stubs since validation is now done in dataclasses
+# These remain functional for backward compatibility when dicts are used
 def verify_vessel_data(vessel_data: dict) -> None:
-    """Stub for backward compatibility with internal functions."""
-    pass  # Validation already done in VesselData.__post_init__
+    """Verify the contents of the 'vessel_data' dictionary.
+
+    Note: When using VesselData dataclass, validation is done in __post_init__.
+    This function is for backward compatibility with dict-based API.
+    """
+    if not isinstance(vessel_data, dict):
+        return  # Dataclass validation already done
+
+    # Check for required keys
+    required_keys = [
+        "length", "beam", "design_speed", "design_draft", "double_ended",
+        "number_of_propulsion_engines", "propulsion_engine_power",
+        "propulsion_engine_type", "propulsion_engine_age",
+        "propulsion_engine_fuel_type", "type", "size"
+    ]
+
+    for key in required_keys:
+        if key not in vessel_data:
+            raise KeyError(f"'vessel_data' is missing a value for '{key}'.")
+
+    # Validate values
+    from cetos.utils import verify_key_value_range, verify_key_value_set
+
+    verify_key_value_range("vessel_data", "length", vessel_data, 5.0, 450.0)
+    verify_key_value_range("vessel_data", "beam", vessel_data, 1.5, 70.0)
+    verify_key_value_range("vessel_data", "design_speed", vessel_data, 1.0, MAX_VESSEL_SPEED_KN)
+    verify_key_value_range("vessel_data", "design_draft", vessel_data, MIN_VESSEL_DRAFT, MAX_VESSEL_DRAFT_M)
+    verify_key_value_set("vessel_data", "number_of_propulsion_engines", vessel_data, [1, 2, 3, 4])
+    verify_key_value_range("vessel_data", "propulsion_engine_power", vessel_data, MIN_ENGINE_POWER_KW, MAX_ENGINE_POWER_KW)
+    verify_key_value_set("vessel_data", "propulsion_engine_type", vessel_data, ENGINE_TYPES)
+    verify_key_value_set("vessel_data", "propulsion_engine_age", vessel_data, ENGINE_AGES)
+    verify_key_value_set("vessel_data", "propulsion_engine_fuel_type", vessel_data, FUEL_TYPES)
+    verify_key_value_set("vessel_data", "type", vessel_data, VESSEL_TYPES)
+    verify_key_value_set("vessel_data", "double_ended", vessel_data, [True, False])
+
+    if vessel_data["size"] is not None:
+        verify_key_value_range("vessel_data", "size", vessel_data, 0, 500_000)
 
 
 def verify_voyage_profile(voyage_profile: dict) -> None:
-    """Stub for backward compatibility with internal functions."""
-    pass  # Validation already done in VoyageProfile.__post_init__
+    """Verify the contents of a voyage_profile variable.
+
+    Note: When using VoyageProfile dataclass, validation is done in __post_init__.
+    This function is for backward compatibility with dict-based API.
+    """
+    if not isinstance(voyage_profile, dict):
+        return  # Dataclass validation already done
+
+    # Check for required keys
+    required_keys = ["time_anchored", "time_at_berth", "legs_manoeuvring", "legs_at_sea"]
+
+    for key in required_keys:
+        if key not in voyage_profile:
+            raise KeyError(f"The variable 'voyage_profile' is missing the {key} key-value pair.")
+
+    # Validate values
+    from cetos.utils import verify_key_value_type, verify_key_value_range
+
+    max_hours = 24 * 365
+    verify_key_value_type("voyage_profile", "time_anchored", voyage_profile, float)
+    verify_key_value_range("voyage_profile", "time_anchored", voyage_profile, 0, max_hours)
+    verify_key_value_type("voyage_profile", "time_at_berth", voyage_profile, float)
+    verify_key_value_range("voyage_profile", "time_at_berth", voyage_profile, 0, max_hours)
+    verify_key_value_type("voyage_profile", "legs_manoeuvring", voyage_profile, list)
+    verify_key_value_type("voyage_profile", "legs_at_sea", voyage_profile, list)
 
 
 # Internal conversion helpers for backwards compatibility with internal functions

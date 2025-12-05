@@ -6,8 +6,8 @@ used throughout cetos. All models include validation and comprehensive
 documentation.
 """
 
-from dataclasses import dataclass, field
-from typing import List, Literal, Optional
+from dataclasses import dataclass, field, asdict
+from typing import List, Literal, Optional, Dict, Any
 
 from cetos.enums import VesselType, FuelType, EngineType, EngineAge
 
@@ -216,6 +216,10 @@ class FuelConsumptionBreakdown:
     average_fuel_consumption_l_per_nm: float = 0.0
     steam_boilers_kg: Optional[float] = None
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return asdict(self)
+
 
 @dataclass(frozen=True)
 class FuelConsumptionResult:
@@ -240,6 +244,10 @@ class FuelConsumptionResult:
     anchored: FuelConsumptionBreakdown
     manoeuvring: FuelConsumptionBreakdown
     at_sea: FuelConsumptionBreakdown
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for JSON serialization."""
+        return asdict(self)
 
 
 @dataclass(frozen=True)
