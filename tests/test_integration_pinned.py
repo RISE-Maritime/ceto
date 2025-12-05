@@ -90,7 +90,7 @@ def test_ais_to_vessel_data_to_fuel_consumption_pinned(
     # Step 3: Calculate fuel consumption
     result = estimate_fuel_consumption(vessel_data, voyage_profile)
 
-    assert result.to_dict() == pinned
+    assert result == pinned
 
 
 def test_complete_ferry_workflow_pinned(pinned):
@@ -155,7 +155,7 @@ def test_complete_ferry_workflow_pinned(pinned):
     result = {
         "vessel_data": vessel_data,
         "voyage_data": voyage_data,
-        "fuel_consumption": fuel_consumption.to_dict(),
+        "fuel_consumption": fuel_consumption,
         "energy_consumption": energy_consumption,
         "gas_system": gas_system,
         "battery_system": battery_system,

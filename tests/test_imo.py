@@ -181,11 +181,11 @@ def test_estimate_fuel_consumption():
         "legs_at_sea": [],
     }
     fc_ = estimate_fuel_consumption(DUMMY_VESSEL_DATA, vp0)
-    assert fc_.total_kg == 0
-    assert fc_.at_berth.subtotal_kg == 0
-    assert fc_.anchored.subtotal_kg == 0
-    assert fc_.manoeuvring.subtotal_kg == 0
-    assert fc_.at_sea.subtotal_kg == 0
+    assert fc_["total_kg"] == 0
+    assert fc_["at_berth"]["subtotal_kg"] == 0
+    assert fc_["anchored"]["subtotal_kg"] == 0
+    assert fc_["manoeuvring"]["subtotal_kg"] == 0
+    assert fc_["at_sea"]["subtotal_kg"] == 0
 
     design_draft = DUMMY_VESSEL_DATA["design_draft"]
     vp1 = {
@@ -196,20 +196,20 @@ def test_estimate_fuel_consumption():
     }
 
     fc_ = estimate_fuel_consumption(DUMMY_VESSEL_DATA, vp1)
-    assert fc_.total_kg != approx(0.0)
-    assert fc_.at_berth.auxiliary_engines_kg != approx(0.0)
-    assert fc_.anchored.auxiliary_engines_kg != approx(0.0)
-    assert fc_.manoeuvring.auxiliary_engines_kg != approx(0.0)
-    assert fc_.at_sea.auxiliary_engines_kg != approx(0.0)
+    assert fc_["total_kg"] != approx(0.0)
+    assert fc_["at_berth"]["auxiliary_engines_kg"] != approx(0.0)
+    assert fc_["anchored"]["auxiliary_engines_kg"] != approx(0.0)
+    assert fc_["manoeuvring"]["auxiliary_engines_kg"] != approx(0.0)
+    assert fc_["at_sea"]["auxiliary_engines_kg"] != approx(0.0)
 
     # No boiler
-    assert fc_.at_berth.steam_boilers_kg == approx(0.0)
-    assert fc_.anchored.steam_boilers_kg == approx(0.0)
-    assert fc_.manoeuvring.steam_boilers_kg == approx(0.0)
-    assert fc_.at_sea.steam_boilers_kg == approx(0.0)
+    assert fc_["at_berth"]["steam_boilers_kg"] == approx(0.0)
+    assert fc_["anchored"]["steam_boilers_kg"] == approx(0.0)
+    assert fc_["manoeuvring"]["steam_boilers_kg"] == approx(0.0)
+    assert fc_["at_sea"]["steam_boilers_kg"] == approx(0.0)
 
-    assert fc_.manoeuvring.propulsion_engines_kg != approx(0.0)
-    assert fc_.at_sea.propulsion_engines_kg != approx(0.0)
+    assert fc_["manoeuvring"]["propulsion_engines_kg"] != approx(0.0)
+    assert fc_["at_sea"]["propulsion_engines_kg"] != approx(0.0)
 
 
 def test_estimate_fuel_consumption_of_propulsion_engines():
@@ -221,6 +221,6 @@ def test_estimate_fuel_consumption_of_propulsion_engines():
 
     assert fc != 0.0
     assert fc == approx(
-        fc_all.manoeuvring.propulsion_engines_kg
-        + fc_all.at_sea.propulsion_engines_kg
+        fc_all["manoeuvring"]["propulsion_engines_kg"]
+        + fc_all["at_sea"]["propulsion_engines_kg"]
     )
