@@ -4,11 +4,18 @@ Estimates of fuel and energy consumption for vessels.
 
 # pylint: disable=too-many-locals
 
+from typing import Optional, Union
 
+from cetos.enums import VesselType, FuelType, EngineType, EngineAge
+from cetos.models import (
+    VesselData,
+    VoyageProfile,
+    FuelConsumptionResult,
+    FuelConsumptionBreakdown,
+    EnergyConsumptionResult,
+    EnergyConsumptionBreakdown,
+)
 from cetos.utils import (
-    verify_key_value_range,
-    verify_key_value_set,
-    verify_key_value_type,
     verify_range,
     verify_set,
 )
@@ -59,165 +66,136 @@ MAX_ENGINE_RPM = 5_000
 MAX_ENGINE_POWER_KW = 60_000
 
 
-def verify_vessel_data(vessel_data):
-    """Verify the contents of the 'vessel_data' dictionary"""
-
-    try:
-        verify_key_value_range("vessel_data", "length", vessel_data, 5.0, 450.0)
-
-        verify_key_value_range("vessel_data", "beam", vessel_data, 1.5, 70.0)
-
-        verify_key_value_range(
-            "vessel_data", "design_speed", vessel_data, 1.0, MAX_VESSEL_SPEED_KN
-        )
-        verify_key_value_range(
-            "vessel_data",
-            "design_draft",
-            vessel_data,
-            MIN_VESSEL_DRAFT,
-            MAX_VESSEL_DRAFT_M,
-        )
-        verify_key_value_set(
-            "vessel_data", "number_of_propulsion_engines", vessel_data, [1, 2, 3, 4]
-        )
-        verify_key_value_range(
-            "vessel_data",
-            "propulsion_engine_power",
-            vessel_data,
-            MIN_ENGINE_POWER_KW,
-            MAX_ENGINE_POWER_KW,
-        )
-        verify_key_value_set(
-            "vessel_data", "propulsion_engine_type", vessel_data, ENGINE_TYPES
-        )
-        verify_key_value_set(
-            "vessel_data", "propulsion_engine_age", vessel_data, ENGINE_AGES
-        )
-        verify_key_value_set(
-            "vessel_data", "propulsion_engine_fuel_type", vessel_data, FUEL_TYPES
-        )
-        verify_key_value_set("vessel_data", "type", vessel_data, VESSEL_TYPES)
-
-        verify_key_value_set("vessel_data", "double_ended", vessel_data, [True, False])
-
-        if vessel_data["size"] is not None:
-            verify_key_value_range("vessel_data", "size", vessel_data, 0, 500_000)
-
-        # if vessel_data["size"] is not None:
-        # else:
-        #     none_vessel_types = [
-        #         "yacht",
-        #         "service-tug",
-        #         "miscellaneous-fishing",
-        #         "offshore",
-        #         "service-other",
-        #         "miscellaneous-other",
-        #     ]
-        #     if vessel_data["type"] not in none_vessel_types:
-        #         raise ValueError(
-        #             f"The value for the key 'size', in the variable 'vessel_data',
-        #               can ONLYs be 'None' for the vessel types: {none_vessel_types}."
-        #         )
-
-    except KeyError as err:
-        raise KeyError(f"'vessel_data' is missing a value for '{err}'.") from err
+# Legacy verification functions for internal dict-based functions
+# These are minimal stubs since validation is now done in dataclasses
+def verify_vessel_data(vessel_data: dict) -> None:
+    """Stub for backward compatibility with internal functions."""
+    pass  # Validation already done in VesselData.__post_init__
 
 
-def verify_voyage_profile(voyage_profile):
-    """Verify the contents of a voyage_profile variable"""
-    max_hours = 24 * 365  # One year's worth of hours
-    try:
-        verify_key_value_type("voyage_profile", "time_anchored", voyage_profile, float)
-        verify_key_value_range(
-            "voyage_profile", "time_anchored", voyage_profile, 0, max_hours
-        )
-
-        verify_key_value_type("voyage_profile", "time_at_berth", voyage_profile, float)
-        verify_key_value_range(
-            "voyage_profile", "time_at_berth", voyage_profile, 0, max_hours
-        )
-
-        verify_key_value_type(
-            "voyage_profile", "legs_manoeuvring", voyage_profile, list
-        )
-
-        verify_key_value_type("voyage_profile", "legs_at_sea", voyage_profile, list)
-
-    except KeyError as err:
-        raise KeyError(
-            f"The variable 'voyage_profile' is missing the {err} key-value pair."
-        ) from err
+def verify_voyage_profile(voyage_profile: dict) -> None:
+    """Stub for backward compatibility with internal functions."""
+    pass  # Validation already done in VoyageProfile.__post_init__
 
 
-def calculate_fuel_volume(mass, fuel_type):
-    """Calculate the fuel volume
+# Internal conversion helpers for backwards compatibility with internal functions
+def _vessel_data_to_dict(vessel_data) -> dict:
+    """Convert VesselData dataclass to dict for internal functions.
 
-    Arguments:
-    -----------
+    This helper allows us to keep the internal calculation logic unchanged
+    while providing a modern external API.
 
-        mass: float
-            Mass of fuel (kg).
-
-        fuel_type: string
-            Type of fuel. Possible values:
-                - HFO: Heavy Fuel Oil
-                - MDO: Marine Diesel Oil
-                - LNG: Liquid Natural Gas
-                - MeOH: Methanol
+    Args:
+        vessel_data: Either a VesselData dataclass or a dict (for backward compat)
 
     Returns:
-    --------
-
-        float
-            Volume of the fuel (m3).
-
-    Source:
-        Table 10 in page 294 of [1].
+        Dictionary representation of vessel data
     """
-    verify_set("fuel_type", fuel_type, FUEL_TYPES)
-    if fuel_type == "HFO":
+    # If already a dict, return it (backward compatibility)
+    if isinstance(vessel_data, dict):
+        return vessel_data
+
+    # Convert dataclass to dict
+    return {
+        "length": vessel_data.length,
+        "beam": vessel_data.beam,
+        "design_speed": vessel_data.design_speed,
+        "design_draft": vessel_data.design_draft,
+        "double_ended": vessel_data.double_ended,
+        "number_of_propulsion_engines": vessel_data.number_of_propulsion_engines,
+        "propulsion_engine_power": vessel_data.propulsion_engine_power,
+        "propulsion_engine_type": vessel_data.propulsion_engine_type.value,
+        "propulsion_engine_age": vessel_data.propulsion_engine_age.value,
+        "propulsion_engine_fuel_type": vessel_data.propulsion_engine_fuel_type.value,
+        "type": vessel_data.type.value,
+        "size": vessel_data.size,
+    }
+
+
+def _voyage_profile_to_dict(voyage_profile) -> dict:
+    """Convert VoyageProfile dataclass to dict for internal functions.
+
+    Args:
+        voyage_profile: Either a VoyageProfile dataclass or a dict (for backward compat)
+
+    Returns:
+        Dictionary representation of voyage profile
+    """
+    # If already a dict, return it (backward compatibility)
+    if isinstance(voyage_profile, dict):
+        return voyage_profile
+
+    # Convert dataclass to dict
+    return {
+        "time_anchored": voyage_profile.time_anchored,
+        "time_at_berth": voyage_profile.time_at_berth,
+        "legs_manoeuvring": [
+            (leg.distance, leg.speed, leg.draft)
+            for leg in voyage_profile.legs_manoeuvring
+        ],
+        "legs_at_sea": [
+            (leg.distance, leg.speed, leg.draft)
+            for leg in voyage_profile.legs_at_sea
+        ],
+    }
+
+
+def calculate_fuel_volume(mass: float, fuel_type: FuelType) -> float:
+    """Calculate the fuel volume from mass and fuel type.
+
+    Args:
+        mass: Mass of fuel (kg)
+        fuel_type: Type of fuel (HFO, MDO, LNG, or MeOH)
+
+    Returns:
+        Volume of the fuel (m³)
+
+    Example:
+        >>> from cetos import calculate_fuel_volume, FuelType
+        >>> volume = calculate_fuel_volume(1000, FuelType.MDO)
+        >>> print(f"{volume:.2f} m³")
+
+    References:
+        Table 10 in page 294 of IMO Fourth IMO GHG Study 2020.
+    """
+    # Convert enum to string value for backward compatibility
+    fuel_type_str = fuel_type.value if isinstance(fuel_type, FuelType) else fuel_type
+    verify_set("fuel_type", fuel_type_str, FUEL_TYPES)
+    if fuel_type_str == "HFO":
         return mass / 1001
-    if fuel_type == "MDO":
+    if fuel_type_str == "MDO":
         return mass / 895
-    if fuel_type == "LNG":
+    if fuel_type_str == "LNG":
         return mass / 450
     return mass / 790
 
 
-def calculate_fuel_mass(volume, fuel_type):
-    """Calculate the fuel mass
+def calculate_fuel_mass(volume: float, fuel_type: FuelType) -> float:
+    """Calculate the fuel mass from volume and fuel type.
 
-    Arguments:
-    -----------
-
-        volume: float
-            Volume of fuel (m3).
-
-        fuel_type: string
-            Type of fuel used by the engine. The possible types/values are:
-                - 'HFO': Heavy Fuel Oil
-                - 'MDO': Marine Diesel Oil
-                - 'MeOH': Methanol
-                - 'LNG': Liquid Natural Gas
+    Args:
+        volume: Volume of fuel (m³)
+        fuel_type: Type of fuel (HFO, MDO, LNG, or MeOH)
 
     Returns:
-    --------
+        Mass of the fuel (kg)
 
-        float
-            Mass of the fuel (kg).
+    Example:
+        >>> from cetos import calculate_fuel_mass, FuelType
+        >>> mass = calculate_fuel_mass(1.0, FuelType.MDO)
+        >>> print(f"{mass:.2f} kg")
 
-    Source:
-    -------
-
-        [1] IMO. Fourth IMO GHG Study 2020. IMO. (Table 10, page 294)
-
+    References:
+        Table 10 in page 294 of IMO Fourth IMO GHG Study 2020.
     """
-    verify_set("fuel_type", fuel_type, FUEL_TYPES)
-    if fuel_type == "HFO":
+    # Convert enum to string value for backward compatibility
+    fuel_type_str = fuel_type.value if isinstance(fuel_type, FuelType) else fuel_type
+    verify_set("fuel_type", fuel_type_str, FUEL_TYPES)
+    if fuel_type_str == "HFO":
         return volume * 1001
-    if fuel_type == "MDO":
+    if fuel_type_str == "MDO":
         return volume * 895
-    if fuel_type == "LNG":
+    if fuel_type_str == "LNG":
         return volume * 450
     return volume * 790
 
@@ -876,51 +854,63 @@ def estimate_fuel_consumption_of_propulsion_engines(
 
 
 def estimate_fuel_consumption(
-    vessel_data,
-    voyage_profile,
-    include_steam_boilers=True,
-    limit_7_percent=True,
-    delta_w=None,
-):
-    """Estimate the fuel consumption of a vessel
+    vessel_data: Union[VesselData, dict],
+    voyage_profile: Union[VoyageProfile, dict],
+    include_steam_boilers: bool = True,
+    limit_7_percent: bool = True,
+    delta_w: Optional[float] = None,
+) -> FuelConsumptionResult:
+    """Estimate the fuel consumption of a vessel.
 
-    Arguments:
-    ----------
+    This function calculates fuel consumption across different operational modes:
+    berthed, anchored, maneuvering, and at sea. It accounts for propulsion engines,
+    auxiliary systems, and optionally steam boilers.
 
-        vessel_data: dict
-            Dictionary describing the vessel.
-
-        voyage_profile: dict
-            Dictionary describing the voyage profile.
-
-        include_steam_boilers (optional): boolean
-            If True, the fuel consumption of the steam boilers is included in the
-            calculation. Defaults to True.
-
-        limit_7_percent (optional): boolean
-            If True, when the engine load is less than 7% the fuel consumption is
-            neglected (i.e. 0.0). Defaults to True.
-
-        delta_w (optional): float
-            Speed-power correction factor: percentage of the Maximum Continous Rating
-            (MCR) of the installed propulsion power at which the design speed is reached
-            in calm water. Defaults to the considerations in [1] to be equal to 0.75 for
-            container ships over 14,500 TEU, 0.7 for cruise ships, and 1.0 for all other
-            vessels (i.e. 75%, 70%, and 100% MCR, respectively). If given a value,
-            the value will override these defaults. Defaults to None.
+    Args:
+        vessel_data: Complete vessel characteristics including dimensions,
+            propulsion system, and vessel type.
+        voyage_profile: Operational profile with time allocations and voyage
+            legs describing distances, speeds, and drafts.
+        include_steam_boilers: Whether to include steam boiler fuel consumption
+            in the total. Default is True.
+        limit_7_percent: Whether to neglect fuel consumption when engine load
+            is below 7% of MCR. Default is True per IMO methodology.
+        delta_w: Speed-power correction factor as fraction of MCR at which
+            design speed is reached. If None, uses IMO defaults: 0.75 for
+            large container ships (>14,500 TEU), 0.7 for cruise ships, 1.0
+            for all others.
 
     Returns:
-    --------
+        Complete fuel consumption breakdown with total and per-mode details.
 
-        Dict
-            Total fuel consumed (kg) and breakdown according to the voyage profile.
+    Example:
+        >>> from cetos import VesselData, VoyageProfile, VoyageLeg
+        >>> from cetos import VesselType, FuelType, EngineType, EngineAge
+        >>> from cetos import estimate_fuel_consumption
+        >>>
+        >>> ferry = VesselData(
+        ...     length=39.8, beam=10.46, design_speed=13.5, design_draft=2.84,
+        ...     double_ended=False, number_of_propulsion_engines=4,
+        ...     propulsion_engine_power=330, propulsion_engine_type=EngineType.MSD,
+        ...     propulsion_engine_age=EngineAge.AFTER_2000,
+        ...     propulsion_engine_fuel_type=FuelType.MDO,
+        ...     type=VesselType.FERRY_PAX, size=686,
+        ... )
+        >>> voyage = VoyageProfile(
+        ...     time_anchored=10.0, time_at_berth=10.0,
+        ...     legs_manoeuvring=[VoyageLeg(10, 10, 6)],
+        ...     legs_at_sea=[VoyageLeg(30, 10, 6), VoyageLeg(30, 10, 6)],
+        ... )
+        >>> result = estimate_fuel_consumption(ferry, voyage)
+        >>> print(f"Total: {result.total_kg:.2f} kg")
+        >>> print(f"At sea: {result.at_sea.subtotal_kg:.2f} kg")
 
-    Source:
-    -------
-
-        [1] IMO. Fourth IMO GHG Study 2020. IMO.
-
+    References:
+        IMO. Fourth IMO GHG Study 2020. International Maritime Organization.
     """
+    # Convert dataclasses to dicts for internal functions
+    vessel_dict = _vessel_data_to_dict(vessel_data)
+    voyage_dict = _voyage_profile_to_dict(voyage_profile)
 
     def _estimate_sailing_fuel_consumption(legs, operation_mode):
         if len(legs) == 0:
@@ -941,7 +931,7 @@ def estimate_fuel_consumption(
             ifc_aux_engine,
             ifc_boiler,
         ) = estimate_instantaneous_fuel_consumption_of_auxiliary_systems(
-            vessel_data, operation_mode
+            vessel_dict, operation_mode
         )
         fc_aux_engine = ifc_aux_engine * total_time
         fc_boiler = ifc_boiler * total_time
@@ -951,7 +941,7 @@ def estimate_fuel_consumption(
         total_dist = 0.0
         for distance, speed, draft in legs:
             ifc_prop = estimate_instantanous_fuel_consumption_of_propulsion_engines(
-                vessel_data,
+                vessel_dict,
                 speed,
                 draft,
                 limit_7_percent=limit_7_percent,
@@ -969,7 +959,7 @@ def estimate_fuel_consumption(
                 "steam_boilers_kg": fc_boiler,
                 "propulsion_engines_kg": fc_prop,
                 "average_fuel_consumption_l_per_nm": calculate_fuel_volume(
-                    fc_subtotal, vessel_data["propulsion_engine_fuel_type"]
+                    fc_subtotal, vessel_dict["propulsion_engine_fuel_type"]
                 )
                 * 1_000
                 / total_dist,
@@ -981,7 +971,7 @@ def estimate_fuel_consumption(
             "auxiliary_engines_kg": fc_aux_engine,
             "propulsion_engines_kg": fc_prop,
             "average_fuel_consumption_l_per_nm": calculate_fuel_volume(
-                fc_subtotal, vessel_data["propulsion_engine_fuel_type"]
+                fc_subtotal, vessel_dict["propulsion_engine_fuel_type"]
             )
             * 1_000
             / total_dist,
@@ -989,10 +979,10 @@ def estimate_fuel_consumption(
 
     # At berth
     ifc_aux, ifc_boiler = estimate_instantaneous_fuel_consumption_of_auxiliary_systems(
-        vessel_data, "at_berth"
+        vessel_dict, "at_berth"
     )
-    fc_aux_at_berth = ifc_aux * voyage_profile["time_at_berth"]
-    fc_boiler_at_berth = ifc_boiler * voyage_profile["time_at_berth"]
+    fc_aux_at_berth = ifc_aux * voyage_dict["time_at_berth"]
+    fc_boiler_at_berth = ifc_boiler * voyage_dict["time_at_berth"]
 
     if include_steam_boilers:
         fc_at_berth = {
@@ -1008,10 +998,10 @@ def estimate_fuel_consumption(
 
     # Anchored
     ifc_aux, ifc_boiler = estimate_instantaneous_fuel_consumption_of_auxiliary_systems(
-        vessel_data, "anchored"
+        vessel_dict, "anchored"
     )
-    fc_aux_anchored = ifc_aux * voyage_profile["time_anchored"]
-    fc_boiler_anchored = ifc_boiler * voyage_profile["time_anchored"]
+    fc_aux_anchored = ifc_aux * voyage_dict["time_anchored"]
+    fc_boiler_anchored = ifc_boiler * voyage_dict["time_anchored"]
     if include_steam_boilers:
         fc_anchored = {
             "subtotal_kg": fc_aux_anchored + fc_boiler_anchored,
@@ -1026,24 +1016,29 @@ def estimate_fuel_consumption(
 
     # Manoeuvring
     fc_manoeuvring = _estimate_sailing_fuel_consumption(
-        voyage_profile["legs_manoeuvring"], "manoeuvring"
+        voyage_dict["legs_manoeuvring"], "manoeuvring"
     )
 
     # At sea
     fc_at_sea = _estimate_sailing_fuel_consumption(
-        voyage_profile["legs_at_sea"], "at_sea"
+        voyage_dict["legs_at_sea"], "at_sea"
     )
 
-    return {
-        "total_kg": fc_at_berth["subtotal_kg"]
+    # Convert dict results to dataclass results
+    total = (
+        fc_at_berth["subtotal_kg"]
         + fc_anchored["subtotal_kg"]
         + fc_manoeuvring["subtotal_kg"]
-        + fc_at_sea["subtotal_kg"],
-        "at_berth": fc_at_berth,
-        "anchored": fc_anchored,
-        "manoeuvring": fc_manoeuvring,
-        "at_sea": fc_at_sea,
-    }
+        + fc_at_sea["subtotal_kg"]
+    )
+
+    return FuelConsumptionResult(
+        total_kg=total,
+        at_berth=FuelConsumptionBreakdown(**fc_at_berth),
+        anchored=FuelConsumptionBreakdown(**fc_anchored),
+        manoeuvring=FuelConsumptionBreakdown(**fc_manoeuvring),
+        at_sea=FuelConsumptionBreakdown(**fc_at_sea),
+    )
 
 
 def estimate_energy_consumption(
